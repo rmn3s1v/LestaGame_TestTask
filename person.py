@@ -10,19 +10,19 @@ class Person():
 class Robber(Person):
     def __init__(self, power, dexterity, stamina):
         super().__init__(power, dexterity, stamina)
-        self.my_weapon = Dagger(2 + self.power)
+        self.my_weapon = Dagger(self.power)
         self.health = 4 + self.stamina
 
 
 class Warrior(Person):
     def __init__(self, power, dexterity, stamina):
         super().__init__(power, dexterity, stamina)
-        self.my_weapon = Sword(3 + self.power)
+        self.my_weapon = Sword(self.power)
         self.health = 5 + self.stamina
 
 
 class Barbarian(Person):
     def __init__(self, power, dexterity, stamina):
         super().__init__(power, dexterity, stamina)
-        self.my_weapon = Cudgel(3 + self.power)
+        self.my_weapon = Cudgel(self.power)
         self.health = 6 + self.stamina
