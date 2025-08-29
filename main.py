@@ -2,6 +2,14 @@ from person import *
 from enemy import *
 import random
 
+def create_new_class(choice):
+    if choice == 1:
+        return Robber(random.randint(0,3), random.randint(0,3), random.randint(0,3))
+    elif choice == 2:
+        return Warrior(random.randint(0,3), random.randint(0,3), random.randint(0,3))
+    else:
+        return Barbarian(random.randint(0,3), random.randint(0,3), random.randint(0,3))
+
 def check_attack(person_g, enemy):
     if random.randint(1, person_g.dexterity + enemy.dexterity) <= enemy.dexterity:
         return 0
@@ -103,6 +111,8 @@ def get_damage(person_g, enemy, attack, round):
 
 def main():
     person_g = None
+    second_person_g = None
+    third_person_g = None
 
     print("Insert you person: \n1 - Robber\n2 - Warrior\n3 - Barbarian")
     choice = int(input())
@@ -142,7 +152,10 @@ def main():
         firts_damage = True
 
         if person_g.dexterity < enemy.dexterity:
+            print(f"Your dexterity {person_g.dexterity}, enemy dexterity {enemy.dexterity}. Enemy better. He first attack")
             firts_damage = False
+        else:
+            print(f"Your dexterity {person_g.dexterity}, enemy dexterity {enemy.dexterity}. You better. You first attack")
 
         print("-------------")
         print(f"Your details:\nHealth: {person_g.health}\nLvl: {person_g.lvl}\nDamage: {person_g.my_weapon.damage}\nPower: {person_g.power}\nDexterity: {person_g.dexterity}\nStamina: {person_g.stamina}")
@@ -158,17 +171,69 @@ def main():
                     print("You missing. Enemy attack")
                     continue
                 else:
-                    damage = get_damage(person_g, enemy, firts_damage, round)
-                    print(f"Your damage: {damage}")
-                    enemy.health -= damage
-                    print(f"Enemy health: {enemy.health}")
+                    if second_person_g == None:
+                        damage = get_damage(person_g, enemy, firts_damage, round)
+                        print(f"Your damage: {damage}")
+                        enemy.health -= damage
+                        print(f"Enemy health: {enemy.health}")
+                    elif second_person_g != None and third_person_g == None:
+                        damage = get_damage(person_g, enemy, firts_damage, round)
+                        damage += get_damage(second_person_g, enemy, firts_damage, round)
+                        print(f"Your damage: {damage}")
+                        enemy.health -= damage
+                        print(f"Enemy health: {enemy.health}")
+                    else:
+                        damage = get_damage(person_g, enemy, firts_damage, round)
+                        damage += get_damage(second_person_g, enemy, firts_damage, round)
+                        damage += get_damage(third_person_g, enemy, firts_damage, round)
+                        print(f"Your damage: {damage}")
+                        enemy.health -= damage
+                        print(f"Enemy health: {enemy.health}")
 
                 if enemy.health <= 0:
-                    print(f"Round:{round} Win! Next!")
+                    print(f"Round:{round}, Lvl:{lvl + 1} - Win! Next!")
                     person_g.return_health()
                     print(f"You health is restored: {person_g.health}")
-                    person_g.lvl += 1
-                    print(f"You level is up: {person_g.lvl}")
+                    print("Select person: \n1 - Robber\n2 - Warrior\n3 - Barbarian\nIf you choice your person, he are lvlup")
+                    choice = int(input())
+                    if choice == 1 and isinstance(person_g, Robber):
+                        person_g.lvl += 1
+                    elif choice == 2 and isinstance(person_g, Warrior):
+                        person_g.lvl += 1
+                    elif choice == 3 and isinstance(person_g, Barbarian):
+                        person_g.lvl += 1
+                    elif choice == 1 and isinstance(second_person_g, Robber):
+                        second_person_g.lvl += 1
+                    elif choice == 2 and isinstance(second_person_g, Warrior):
+                        second_person_g.lvl += 1
+                    elif choice == 3 and isinstance(second_person_g, Barbarian):
+                        second_person_g.lvl += 1
+                    elif choice == 1 and isinstance(third_person_g, Robber):
+                        second_person_g.lvl += 1
+                    elif choice == 2 and isinstance(third_person_g, Warrior):
+                        second_person_g.lvl += 1
+                    elif choice == 3 and isinstance(third_person_g, Barbarian):
+                        second_person_g.lvl += 1
+                    else:
+                        if second_person_g == None:
+                            second_person_g = create_new_class(choice)
+                            person_g.health += second_person_g.health
+                            person_g.dexterity += second_person_g.dexterity
+                            person_g.stamina += second_person_g.stamina
+
+                        elif third_person_g == None:
+                            third_person_g = create_new_class(choice)
+                            person_g.health += third_person_g.health
+                            person_g.dexterity += third_person_g.dexterity
+                            person_g.stamina += third_person_g.stamina
+
+                    if second_person_g == None:
+                        print(f"You level: {person_g.lvl}")
+                    elif second_person_g != None and third_person_g == None:
+                        print(f"You level: {person_g.lvl} and {second_person_g.lvl}")
+                    else:
+                        print(f"You level: {person_g.lvl} and {second_person_g.lvl} and {third_person_g.lvl}")
+
                     round = 0
                     new_weapon = enemy.reward()
                     print(f"Do you want to take weapon from mob ({new_weapon.name})?\n1-yes\n2-no")
@@ -187,10 +252,26 @@ def main():
                     print("Enemy missing. Your attack")
                     continue
                 else:
-                    damage = get_damage(person_g, enemy, firts_damage, round)
-                    print(f"Enemy damage: {damage}")
-                    person_g.health -= damage
-                    print(f"You health: {person_g.health}")
+                    if second_person_g == None:
+                        damage = get_damage(person_g, enemy, firts_damage, round)
+                        print(f"Enemy damage: {damage}")
+                        person_g.health -= damage
+                        print(f"You health: {person_g.health}")
+                    elif second_person_g != None and third_person_g == None:
+                        damage = get_damage(person_g, enemy, firts_damage, round)
+                        damage2 = get_damage(second_person_g, enemy, firts_damage, round)
+                        damage = min(damage, damage2)
+                        print(f"Enemy damage: {damage}")
+                        person_g.health -= damage
+                        print(f"You health: {person_g.health}")
+                    else:
+                        damage = get_damage(person_g, enemy, firts_damage, round)
+                        damage2 = get_damage(second_person_g, enemy, firts_damage, round)
+                        damage3 = get_damage(second_person_g, enemy, firts_damage, round)
+                        damage = min(damage, damage2, damage3)
+                        print(f"Enemy damage: {damage}")
+                        person_g.health -= damage
+                        print(f"You health: {person_g.health}")
 
                 if person_g.health <= 0:
                     print(f"Round:{round} Lose! Game over!")

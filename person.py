@@ -15,6 +15,9 @@ class Person():
     def bonus_third_lvl(self):
         pass
 
+    def return_health(self):
+        pass
+
 class Robber(Person):
     def __init__(self, power, dexterity, stamina):
         super().__init__(power, dexterity, stamina)
