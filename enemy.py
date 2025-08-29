@@ -19,7 +19,10 @@ class Goblin(Enemy):
         self.health = 5
         self.damage = 2
 
-    def reward():
+    def feature(self):
+        pass
+
+    def reward(self):
         return Dagger()
 
 
@@ -34,7 +37,7 @@ class Skeleton(Enemy):
             return 1
         return 0
 
-    def reward():
+    def reward(self):
         return Cudgel()
 
 
@@ -44,12 +47,12 @@ class Slime(Enemy):
         self.health = 8
         self.damage = 1
 
-    def feature(self, weapon_person):
+    def feature(self, weapon_person=None):
         if weapon_person.type_damage == "Рубящий":
             return 1
         return 0
 
-    def reward():
+    def reward(self):
         return Spear()
 
 
@@ -59,10 +62,10 @@ class Ghost(Enemy):
         self.health = 6
         self.damage = 3
 
-    def feature(self, weapon_person):
-        return -1
+    def feature(self, weapon_person=None):
+        return self.damage + 1
 
-    def reward():
+    def reward(self):
         return Sword()
 
 
@@ -72,10 +75,10 @@ class Golem(Enemy):
         self.health = 10
         self.damage = 1
 
-    def feature(self, weapon_person):
-        return -2
+    def feature(self, weapon_person=None):
+        return weapon_person - self.stamina
 
-    def reward():
+    def reward(self):
         return Axe()
 
 
@@ -85,10 +88,10 @@ class Dragon(Enemy):
         self.health = 20
         self.damage = 4
 
-    def feature(self, round):
-        if round == 3:
-            return 1
+    def feature(self, weapon_person=None):
+        if weapon_person == 3:
+            return self.damage + 3
         return 0
 
-    def reward():
+    def reward(self):
         return Legendary_sword()
